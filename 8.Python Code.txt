@@ -1,0 +1,67 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Set Fermi energy
+E_fermi = 3.103  # eV
+
+# Load the data files (in same directory)
+try:
+    # Load total DOS
+    total_data = np.loadtxt('CsPbCl3.dos.pdos_tot')
+    
+    # Load element-specific summed data  
+    pb_data = np.loadtxt('pb_total.dat')
+    cl_data = np.loadtxt('cl_total.dat') 
+    cs_data = np.loadtxt('cs_total.dat')
+    
+    print("All data files loaded successfully!")
+    
+except Exception as e:
+    print(f"Error loading files: {e}")
+    exit()
+
+# Correct energy scale (shift by Fermi level)
+energy_total = total_data[:, 0] - E_fermi
+dos_total = total_data[:, 1]
+
+energy_pb = pb_data[:, 0] - E_fermi
+pdos_pb = pb_data[:, 1]
+
+energy_cl = cl_data[:, 0] - E_fermi  
+pdos_cl = cl_data[:, 1]
+
+energy_cs = cs_data[:, 0] - E_fermi
+pdos_cs = cs_data[:, 1]
+
+# Create the plot exactly like your attached image
+plt.figure(figsize=(8, 6))
+
+# Plot with exact colors and style from your image
+plt.plot(energy_total, dos_total, 'k-', linewidth=2, label='DOS')
+plt.plot(energy_pb, pdos_pb, 'r-', linewidth=2, label='Pb') 
+plt.plot(energy_cl, pdos_cl, 'g-', linewidth=2, label='Cl')
+plt.plot(energy_cs, pdos_cs, 'b-', linewidth=2, label='Cs')
+
+# Format exactly like your attached plot
+plt.xlabel('Energy (eV)', fontsize=12)
+plt.ylabel('DOS (1/eV)', fontsize=12)
+plt.title('CsPbCl₃ Im3 pdos plot', fontsize=14, fontweight='bold')
+
+# Set the same ranges as your attached plot
+plt.xlim(-2.5, 2.5)
+plt.ylim(0, 6)
+
+# Add legend in upper right
+plt.legend(loc='upper right', fontsize=10)
+
+# Clean layout
+plt.tight_layout()
+
+# Save the plot
+plt.savefig('CsPbCl3_pdos_final.png', dpi=300, bbox_inches='tight')
+plt.savefig('CsPbCl3_pdos_final.pdf', bbox_inches='tight')
+
+print("PDOS plot saved as:")
+print("- CsPbCl3_pdos_final.png") 
+print("- CsPbCl3_pdos_final.pdf")
+print("Plot generation completed successfully!")
